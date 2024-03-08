@@ -64,10 +64,12 @@ public class GameController {
 	public ResponseEntity<Game> makeMove(@RequestBody MoveRequestDTO moveRequestDTO) {
 		Long gameId = moveRequestDTO.getGameId();
 		Game game = gameStorageService.getGame(gameId);
-		game.makeMove(moveRequestDTO.getRow(), moveRequestDTO.getCol());
-		if(game.getGameStatus().equals(GameStatus.ENDED) ||
-				game.getGameStatus().equals(GameStatus.DRAW)) {
-			gameStorageService.removeGame(gameId);
+		if(game != null) {
+			game.makeMove(moveRequestDTO.getRow(), moveRequestDTO.getCol());
+			if(game.getGameStatus().equals(GameStatus.ENDED) ||
+					game.getGameStatus().equals(GameStatus.DRAW)) {
+				gameStorageService.removeGame(gameId);
+			}
 		}
 		return ResponseEntity.ok(game);
 	}
